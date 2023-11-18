@@ -5,18 +5,11 @@ use std::process::Command;
 
 #[tauri::command]
 fn echo_cmd(text: &str) -> String {
-  let output = if cfg!(target_os = "windows") {
-    Command::new("cmd")
-      .args(&["/C", "echo", text])
-      .output()
-      .expect("failed to execute process")
-  } else {
-    Command::new("sh")
-      .arg("-c")
-      .arg(format!("echo {}", text))
-      .output()
-      .expect("failed to execute process")
-  };
+  let output = Command::new("sh")
+                        .arg("-c")
+                        .arg(format!("echo {}", text))
+                        .output()
+                        .expect("failed to execute process");
 
   format!("echo: {}", String::from_utf8_lossy(&output.stdout))
 }
